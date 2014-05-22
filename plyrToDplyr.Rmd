@@ -3,19 +3,25 @@ output:
   bootstrap_document:
     theme.chooser: TRUE
     highlight.chooser: TRUE
+    highlight: 'solarized - dark'
+    theme: 'amelia'
 ---
 
 ```{r plyrTodplyr_setup, cache=TRUE, include=FALSE}
 lapply(dir(path='R', pattern='.*\\.r', full.names=T), spin, knit=F)
 opts_chunk$set(message = FALSE, warning = FALSE, bootstrap.class='col-md-6')
-clean_environment = function() {
-  loaded_pkgs = names(sessionInfo()$otherPkgs)
-  if(!is.null(loaded_pkgs)){
-    lapply(paste0('package:', loaded_pkgs), detach, character.only = TRUE, unload = TRUE, force = TRUE)
+clean_environment = (function() {
+  existing_packages = loaded_pkgs = names(sessionInfo()$otherPkgs)
+  existing_objects = c('clean_environment', ls(envir=parent.frame()))
+  function() {
+    loaded_pkgs = Filter(function(x) !x %in% existing_packages, names(sessionInfo()$otherPkgs))
+    if(!is.null(loaded_pkgs)){
+      lapply(paste0('package:', loaded_pkgs), detach, character.only = TRUE, unload = TRUE, force = TRUE)
+    }
+    rm(list=Filter(function(x) !x %in% existing_objects, ls(envir=parent.frame())), envir=parent.frame())
+    invisible()
   }
-  rm(list=Filter(function(x) x != 'clean_environment', ls(envir=parent.frame())), envir=parent.frame())
-  invisible()
-}
+})()
 ```
 <style type="text/css"> div.container { max-width: 95% } </style>
 
@@ -88,6 +94,6 @@ Dplyr: `data %>% group_by(group) %>% do(res=(function(x) something(x$value) )(.)
 
 > Author: [Jim Hester](http://jimhester.com)
 > Created: 2014 May 18 09:33:36 AM
-> Last Modified: 2014 May 22 07:51:08 AM
+> Last Modified: 2014 May 22 10:15:22 AM
 
 <a href="https://github.com/jimhester/plyrTodplyr"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>

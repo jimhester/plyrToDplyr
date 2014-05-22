@@ -1,13 +1,14 @@
 R_SOURCE = $(wildcard R/*.r)
 
-all: plyrToDplyr.html
+all: index.html
 
-plyrToDplyr.html: plyrToDplyr.Rmd $(R_SOURCE)
+index.html: plyrToDplyr.Rmd $(R_SOURCE)
 	Rscript -e "\
-    library('knitr');\
-    library('knitrBootstrap');\
-    library('rmarkdown');\
+    library(knitr);\
+    library(knitrBootstrap);\
+    library(rmarkdown);\
     render('plyrToDplyr.Rmd')"
+	cp plyrToDplyr.html index.html
 
 clean:
-	rm -rf plyrToDplyr.html R/*.Rmd plyrToDplyr_{files,cache} R/*.md
+	rm -rf index.html R/*.Rmd plyrToDplyr_{files,cache} R/*.md
