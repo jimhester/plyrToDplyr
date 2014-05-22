@@ -2,13 +2,16 @@ R_SOURCE = $(wildcard R/*.r)
 
 all: index.html
 
-index.html: plyrToDplyr.Rmd $(R_SOURCE)
+plyrToDplyr.html: plyrToDplyr.Rmd $(R_SOURCE)
 	Rscript -e "\
     library(knitr);\
     library(knitrBootstrap);\
     library(rmarkdown);\
     render('plyrToDplyr.Rmd')"
+
+publish: plyrToDplyr.html
+	git checkout gh-pages
 	cp plyrToDplyr.html index.html
 
 clean:
-	rm -rf index.html R/*.Rmd plyrToDplyr_{files,cache} R/*.md
+	rm -rf *.html R/*.Rmd plyrToDplyr_{files,cache} R/*.md
