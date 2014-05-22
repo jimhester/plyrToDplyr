@@ -1,6 +1,6 @@
 R_SOURCE = $(wildcard R/*.r)
 
-all: index.html
+all: plyrToDplyr.html
 
 plyrToDplyr.html: plyrToDplyr.Rmd $(R_SOURCE)
 	Rscript -e "\
